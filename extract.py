@@ -1,8 +1,8 @@
 import os, fnmatch, sys
 path = os.path.dirname(sys.argv[0])
-urlpath = os.path.join(path,"url")
-urls = os.path.join(urlpath,"urls.txt"); open(urls,"w+")
-scriptfile = os.path.join(urlpath,"dl.ps1"); open(scriptfile,"w+")
+urlpath = os.path.join(path,"urls")
+urls = os.path.join(path,"urls.txt"); open(urls,"w+")
+scriptfile = os.path.join(path,"dl.ps1"); open(scriptfile,"w+")
 
 filelist = os.listdir(urlpath)
 
@@ -14,10 +14,24 @@ for file in filelist:
 			open(urls, "a+").write(link)
 storeurl = open(urls, "r").read().splitlines()
 
-i=0
-for x in storeurl:
-	i = i+1
-	if i < 10:
-		open(scriptfile, "a+").write("ffmpeg -i " + x + " -c copy -bsf:a aac_adtstoasc 'S03E0" + str(i) + ".mp4'\n")
-	else:
-		open(scriptfile, "a+").write("ffmpeg -i " + x + " -c copy -bsf:a aac_adtstoasc 'S03E" + str(i) + ".mp4'\n")
+
+
+season = "S03"
+episode = 72
+
+cmdlist = []
+dquo = '"'
+for url in storeurl:
+	if episode < 10:
+		episodename = season + "E00" + str(episode) + ".mp4"
+	elif episode < 100:
+		episodename = season + "E0" + str(episode) + ".mp4"
+	elif episode < 1000:
+		episodename = season + "E" + str(episode) + ".mp4"
+	cmd = "ffmpeg -i " + dquo + url + dquo + " -c copy -bsf:a aac_adtstoasc " + dquo + episodename + dquo
+	cmdlist.append(cmd)
+	open(scriptfile, "a+").write(cmd + "\n")
+	episode+=1
+for cmd in cmdlist:
+	pass
+	#os.system(cmd)
