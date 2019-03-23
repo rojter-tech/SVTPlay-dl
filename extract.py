@@ -14,8 +14,6 @@ for file in filelist:
 			open(urls, "a+").write(link)
 storeurl = open(urls, "r").read().splitlines()
 
-
-
 season = "S03"
 episode = 72
 
@@ -28,10 +26,9 @@ for url in storeurl:
 		episodename = season + "E0" + str(episode) + ".mp4"
 	elif episode < 1000:
 		episodename = season + "E" + str(episode) + ".mp4"
-	cmd = "ffmpeg -i " + dquo + url + dquo + " -c copy -bsf:a aac_adtstoasc " + dquo + episodename + dquo
+	cmd = "youtube-dl " + dquo + url + dquo + " -f best" + " -o " + dquo + episodename + dquo
 	cmdlist.append(cmd)
 	open(scriptfile, "a+").write(cmd + "\n")
 	episode+=1
 for cmd in cmdlist:
-	pass
-	#os.system(cmd)
+	os.system(cmd)
